@@ -22,8 +22,9 @@ public class UserChatServiceImpl implements UserChatService {
             return List.of();
         }
         var userChats = userChatRepository.getUserChatsByUserId(userId);
-        userChats.stream()
+        return userChats.stream()
                 .map(userChat -> objectMapper.convertValue(userChat, UserController.UserChatDto.class))
                 .toList();
     }
+
 }
