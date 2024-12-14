@@ -1,0 +1,21 @@
+services:
+  cassandra:
+    image: 'cassandra:latest'
+    environment:
+      - 'CASSANDRA_USER=admin'
+      - 'CASSANDRA_PASSWORD=admin'
+      - 'CASSANDRA_KEYSPACE=springframework'
+    volumes:
+      - '/var/lib/cassandra'
+    ports:
+      - '9042:9042'
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=postgres'
+      - 'POSTGRES_PASSWORD=postgres'
+      - 'POSTGRES_USER=postgres'
+    volumes:
+        - '/var/lib/postgresql/data'
+    ports:
+      - '5432:5432'

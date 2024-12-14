@@ -1,0 +1,23 @@
+spring:
+  docker:
+    compose:
+      enabled: false
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  cassandra:
+    contact-points: http://localhost:9042
+    keyspace-name: springframework
+    username: admin
+    password: admin
+    connection:
+      connect-timeout: 10s
+    request:
+      timeout: 10s
+    schema-action: CREATE_IF_NOT_EXISTS
