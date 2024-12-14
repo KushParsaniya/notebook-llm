@@ -1,6 +1,7 @@
 package dev.kush.notebookllm.service.impl;
 
 import dev.kush.notebookllm.entity.ChatHistory;
+import dev.kush.notebookllm.entity.UserChat;
 import dev.kush.notebookllm.repository.ChatHistoryRepository;
 import dev.kush.notebookllm.repository.UserChatRepository;
 import dev.kush.notebookllm.service.UserService;
@@ -29,6 +30,7 @@ public class CustomCassandraChatMemory implements ChatMemory {
     @Override
     public void add(String conversationId, List<Message> messages) {
         // TODO: username from security context
+        UserChat userChat = new UserChat();
         log.info("Adding messages to conversationId: {}", conversationId);
         var chatHistories = messages.stream()
                 .map(message -> getChatHistory(conversationId, message))

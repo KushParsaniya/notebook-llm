@@ -42,6 +42,7 @@ dependencies {
     implementation 'com.backblaze.b2:b2-sdk-core:6.2.0'
     implementation 'com.backblaze.b2:b2-sdk-httpclient:6.2.0'
     implementation 'org.springframework.ai:spring-ai-pdf-document-reader'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
     testImplementation 'org.springframework.security:spring-security-test'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-docker-compose'

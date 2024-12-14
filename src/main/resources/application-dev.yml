@@ -21,3 +21,8 @@ spring:
     request:
       timeout: 10s
     schema-action: CREATE_IF_NOT_EXISTS
+logging:
+  level:
+    org:
+      springframework:
+        security: trace

@@ -16,4 +16,7 @@ public interface UserChatRepository extends CassandraRepository<UserChat, Long> 
 
     @Query("select * from user_chat where user_id =:userId")
     List<UserChat> getUserChatsByUserId(long userId);
+
+    @Query("select count(1) > 0 from user_chat where username=:username and chat_id=:chat_id")
+    boolean existsByUsernameAndChatId(String username, String chatId);
 }
