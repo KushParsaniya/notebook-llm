@@ -65,6 +65,7 @@ public class B2ServiceImpl implements B2Service {
                 userService.getCurrentUsername(),
                 null,
                 uploadedFile.getFileId(),
+                customB2ContentSource.getFile().getName(),
                 uploadedFile.getContentType(),
                 UploadedFileStatus.REMAINING,
                 customB2ContentSource.getFile().getTotalSpace()

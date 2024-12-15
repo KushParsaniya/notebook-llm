@@ -12,4 +12,7 @@ public interface ChatHistoryRepository extends CassandraRepository<ChatHistory, 
 
     @Query("SELECT * FROM chat_history WHERE chat_id = :conversationId LIMIT :lastN")
     List<ChatHistory> findByChatId(String conversationId, int lastN);
+
+    @Query("Select * from chat_history where chat_id = :chatId")
+    List<ChatHistory> findChatHistoryByChatIdAndUsername(String chatId);
 }

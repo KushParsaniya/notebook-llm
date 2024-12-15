@@ -2,6 +2,7 @@ package dev.kush.notebookllm.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.kush.notebookllm.controller.UserController;
+import dev.kush.notebookllm.entity.UserChat;
 import dev.kush.notebookllm.repository.UserChatRepository;
 import dev.kush.notebookllm.service.UserChatService;
 import lombok.RequiredArgsConstructor;
@@ -27,4 +28,13 @@ public class UserChatServiceImpl implements UserChatService {
                 .toList();
     }
 
+    @Override
+    public boolean existsByUsernameAndChatId(long userId, String chatId) {
+        return userChatRepository.existsByUsernameAndChatId(userId, chatId) > 0;
+    }
+
+    @Override
+    public UserChat save(UserChat userChat) {
+        return userChatRepository.save(userChat);
+    }
 }

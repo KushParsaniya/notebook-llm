@@ -1,6 +1,5 @@
 package dev.kush.notebookllm.repository;
 
-import dev.kush.notebookllm.controller.UserController;
 import dev.kush.notebookllm.entity.UserChat;
 import org.springframework.data.cassandra.repository.CassandraRepository;
 import org.springframework.data.cassandra.repository.Query;
@@ -17,6 +16,6 @@ public interface UserChatRepository extends CassandraRepository<UserChat, Long> 
     @Query("select * from user_chat where user_id =:userId")
     List<UserChat> getUserChatsByUserId(long userId);
 
-    @Query("select count(1) > 0 from user_chat where username=:username and chat_id=:chat_id")
-    boolean existsByUsernameAndChatId(String username, String chatId);
+    @Query("select count(*) from user_chat where user_id=:userId and chat_id=:chatId")
+    long existsByUsernameAndChatId(long userId, String chatId);
 }

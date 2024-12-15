@@ -16,7 +16,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 
     @Modifying
-    @Transactional
     @Query("UPDATE User u SET u.password =:password WHERE u.username =:username")
     int updatePasswordByUsername(String username, String password);
 
@@ -25,4 +24,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select count(1) > 0 from User u where u.username = :username")
     boolean existsByUsername(String username);
+
+    @Modifying
+    @Query(nativeQuery = true, value = "update users set deleted =:deleted where username =:username")
+    int updateDeletedByUsername(String currentUsername, boolean deleted);
 }

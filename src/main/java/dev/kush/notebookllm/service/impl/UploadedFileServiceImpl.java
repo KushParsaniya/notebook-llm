@@ -1,5 +1,6 @@
 package dev.kush.notebookllm.service.impl;
 
+import dev.kush.notebookllm.controller.UserController;
 import dev.kush.notebookllm.entity.UploadedFile;
 import dev.kush.notebookllm.repository.UploadedFileRepository;
 import dev.kush.notebookllm.service.UploadedFileService;
@@ -34,5 +35,10 @@ public class UploadedFileServiceImpl implements UploadedFileService {
     @Override
     public long countUploadedFilesByStatus(String status) {
         return uploadedFileRepository.countUploadedFilesByStatus(status);
+    }
+
+    @Override
+    public List<UserController.UserUploadedFileDto> getUserUploadedFilesByUserId(long currentUserId) {
+        return uploadedFileRepository.getUserUploadedFilesByUserId(currentUserId);
     }
 }

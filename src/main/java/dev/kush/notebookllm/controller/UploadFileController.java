@@ -22,7 +22,7 @@ public class UploadFileController {
     private final B2Service b2Service;
 
     @PostMapping("/upload-small-file")
-    public ResponseEntity<Boolean> uploadFile(@RequestParam("file") MultipartFile multipartFile) {
+    public ResponseEntity<Boolean> uploadFile(@RequestParam("multipartFile") MultipartFile multipartFile) {
         File file = convertMultiPartToFile(multipartFile);
         if (file == null) {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);

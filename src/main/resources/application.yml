@@ -29,6 +29,9 @@ spring:
   datasource:
     hikari:
       auto-commit: false
+  servlet:
+    multipart:
+      max-file-size: 5MB
 b2:
   application:
     key:

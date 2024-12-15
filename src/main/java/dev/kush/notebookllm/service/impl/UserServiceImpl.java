@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.stream.Collectors;
@@ -73,13 +74,25 @@ public class UserServiceImpl implements UserService {
         try {
             Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
             var authUser = authenticationManager.authenticate(authentication);
-            SecurityContextHolder.getContext().setAuthentication(authUser);
+            var securityContext = SecurityContextHolder.createEmptyContext();
+            securityContext.setAuthentication(authUser);
+            SecurityContextHolder.setContext(securityContext);
             return getJwtToken(username, authUser);
         } catch (AuthenticationException e) {
             throw new InvalidCredentialsException("Invalid username or password");
         }
+    }
 
+    @Override
+    @Transactional
+    public boolean updateDeletedByUsername(boolean deleted) {
+        return userRepository.updateDeletedByUsername(getCurrentUsername(), true) > 0;
+    }
 
+    @Override
+    @Transactional
+    public boolean updatePasswordByUsername(String password) {
+        return userRepository.updatePasswordByUsername(getCurrentUsername(), passwordEncoder.encode(password)) > 0;
     }
 
     private String getJwtToken(String username, Authentication authUser) {

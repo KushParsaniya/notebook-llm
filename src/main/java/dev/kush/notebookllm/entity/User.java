@@ -26,7 +26,7 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@SoftDelete
+@SoftDelete
 public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +42,7 @@ public class User {
 
     private String phoneNumber;
 
-    @Column(name = "created_at", columnDefinition = "timestamp default current_timestamp")
+    @Column(name = "created_at")
     private Instant createdAt = Instant.now();
 
     @Column(name = "enabled", columnDefinition = "boolean default false")

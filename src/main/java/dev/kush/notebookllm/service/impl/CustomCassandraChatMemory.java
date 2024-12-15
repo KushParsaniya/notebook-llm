@@ -2,8 +2,8 @@ package dev.kush.notebookllm.service.impl;
 
 import dev.kush.notebookllm.entity.ChatHistory;
 import dev.kush.notebookllm.entity.UserChat;
-import dev.kush.notebookllm.repository.ChatHistoryRepository;
-import dev.kush.notebookllm.repository.UserChatRepository;
+import dev.kush.notebookllm.service.ChatHistoryService;
+import dev.kush.notebookllm.service.UserChatService;
 import dev.kush.notebookllm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,36 +23,44 @@ import java.util.List;
 @Service
 public class CustomCassandraChatMemory implements ChatMemory {
 
-    private final UserChatRepository userChatRepository;
-    private final ChatHistoryRepository chatHistoryRepository;
+    private final ChatHistoryService chatHistoryService;
     private final UserService userService;
+    private final UserChatService userChatService;
 
     @Override
     public void add(String conversationId, List<Message> messages) {
         // TODO: username from security context
-        UserChat userChat = new UserChat();
+        var userId = userService.getCurrentUserId();
+        var username = userService.getCurrentUsername();
+        if (!userChatService.existsByUsernameAndChatId(userId, conversationId)) {
+            userChatService.save(new UserChat(userId, username, getTitle(messages), conversationId));
+        }
         log.info("Adding messages to conversationId: {}", conversationId);
         var chatHistories = messages.stream()
-                .map(message -> getChatHistory(conversationId, message))
+                .map(message -> getChatHistory(conversationId, message, userId, username))
                 .toList();
-        chatHistoryRepository.saveAll(chatHistories);
+        chatHistoryService.saveAll(chatHistories);
     }
 
-    private ChatHistory getChatHistory(String conversationId, Message message) {
-        return new ChatHistory(conversationId, userService.getCurrentUserId(), userService.getCurrentUsername(),
-                message.getContent(), message.getMessageType().getValue(), Instant.now());
+    private static String getTitle(List<Message> messages) {
+        return messages.getFirst().getContent().substring(0, 20);
+    }
+
+    private ChatHistory getChatHistory(String conversationId, Message message, long userId, String username) {
+        return new ChatHistory(conversationId, userId, username,
+                message.getContent(), message.getMessageType(), Instant.now());
     }
 
     @Override
     public List<Message> get(String conversationId, int lastN) {
         log.info("Getting chat history for conversationId: {}", conversationId);
-        return chatHistoryRepository.findByChatId(conversationId, lastN).stream()
+        return chatHistoryService.findByChatId(conversationId, lastN).stream()
                 .map(this::createMessage)
                 .toList();
     }
 
     private Message createMessage(ChatHistory chatHistory) {
-        return switch (MessageType.valueOf(chatHistory.getMessageType())) {
+        return switch (chatHistory.getMessageType()) {
             case MessageType.USER, TOOL -> new UserMessage(chatHistory.getMessage());
             case ASSISTANT -> new AssistantMessage(chatHistory.getMessage());
             case SYSTEM -> new SystemMessage(chatHistory.getMessage());

@@ -48,11 +48,19 @@ public class DocumentServiceImpl implements DocumentService {
                     .getMetadata()
                     .putAll(Map.of("userId", userId, "username", username))
             );
+            documents.forEach(document -> {
+                vectorStore.accept(List.of(document));
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
             vectorStore.accept(documents);
             uploadedFileService.updateIsProcessedByIdAndFileId(id, fileId, UploadedFileStatus.FINISHED.getValue());
             log.info("DocumentService :: processDocument :: processing end for fileId {}", fileId);
         } catch (Exception e) {
-            log.info("DocumentService :: processDocument :: error for fileId {}", fileId);
+            log.error("DocumentService :: processDocument :: error for fileId {}, error: {}", fileId, e.getMessage());
             uploadedFileService.updateIsProcessedByIdAndFileId(id, fileId, UploadedFileStatus.REMAINING.getValue());
         }
     }

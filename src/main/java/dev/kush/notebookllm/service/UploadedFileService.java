@@ -1,5 +1,6 @@
 package dev.kush.notebookllm.service;
 
+import dev.kush.notebookllm.controller.UserController;
 import dev.kush.notebookllm.entity.UploadedFile;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface UploadedFileService {
     List<UploadedFile> getUploadedFilesByStatus(String status, long offset, long limit);
 
     long countUploadedFilesByStatus(String status);
+
+    List<UserController.UserUploadedFileDto> getUserUploadedFilesByUserId(long currentUserId);
 }

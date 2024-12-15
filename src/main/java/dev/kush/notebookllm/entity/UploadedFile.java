@@ -13,6 +13,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SoftDelete;
+
+import java.time.Instant;
 
 @Entity
 @Table(name = "uploaded_files")
@@ -20,7 +23,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@SoftDelete
+@SoftDelete
 public class UploadedFile {
 
     @Id
@@ -35,19 +38,24 @@ public class UploadedFile {
 
     private String fileId;
 
+    private String fileName;
+
     private String contentType;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "is_processed", columnDefinition = "text check (is_processed in ('REMAINING','PROCESSING','FINISHED'))")
+    @Column(name = "status", columnDefinition = "text check (status in ('REMAINING','PROCESSING','FINISHED'))")
     private UploadedFileStatus status;
+
+    private Instant createdAt = Instant.now();
 
     private long size;
 
-    public UploadedFile(long userId, String username, String uri, String fileId, String contentType,UploadedFileStatus status, long size) {
+    public UploadedFile(long userId, String username, String uri, String fileId,String fileName, String contentType,UploadedFileStatus status, long size) {
         this.userId = userId;
         this.username = username;
         this.uri = uri;
         this.fileId = fileId;
+        this.fileName = fileName;
         this.contentType = contentType;
         this.status = status;
         this.size = size;

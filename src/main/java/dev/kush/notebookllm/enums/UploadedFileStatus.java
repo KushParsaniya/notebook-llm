@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public enum UploadedFileStatus {
 
-    REMAINING("remaining"),
-    PROCESSING("processing"),
-    FINISHED("finished");
+    REMAINING("REMAINING"),
+    PROCESSING("PROCESSING"),
+    FINISHED("FINISHED");
 
     private final String value;
 

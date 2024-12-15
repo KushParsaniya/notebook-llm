@@ -31,5 +31,12 @@ public class UserChat {
 
     @PrimaryKeyColumn(name = "created_at", ordinal = 2, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
     @CassandraType(type = CassandraType.Name.TIMESTAMP)
-    private Instant createdAt;
+    private Instant createdAt = Instant.now();
+
+    public UserChat(long userId, String username, String title, String chatId) {
+        this.userId = userId;
+        this.username = username;
+        this.title = title;
+        this.chatId = chatId;
+    }
 }
