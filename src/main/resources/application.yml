@@ -1,6 +1,11 @@
 spring:
   application:
     name: notebook-llm
+  docker:
+    compose:
+      enabled: false
+  profiles:
+    active: prod
   ai:
     openai:
       api-key: ${GROQ_API_KEY}
@@ -22,8 +27,6 @@ spring:
     vectorstore:
       cassandra:
         initialize-schema: true
-  profiles:
-    active: dev
   jpa:
     open-in-view: false
   datasource:
