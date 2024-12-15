@@ -1,8 +1,4 @@
 spring:
-  docker:
-    compose:
-      enabled: false
-
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres

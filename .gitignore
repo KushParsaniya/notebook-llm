@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### datastax ###
+src/main/resources/cassandra/secure-connect-spring-ai.zip
