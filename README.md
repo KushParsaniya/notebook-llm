@@ -23,8 +23,9 @@ To run this project, ensure you have the following installed:
 
 1. **Clone the Repository**:
    ```bash
-   git clone <repository-url>
-   cd notebook-llm-project
+   git clone https://github.com/KushParsaniya/notebook-llm
+   cd notebook-llm
+   ```
 
 2. **Add API key**:
 Add api key for openaAI, and install ollama in your local machine.
