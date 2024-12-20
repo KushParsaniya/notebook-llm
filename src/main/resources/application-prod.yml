@@ -26,3 +26,5 @@ astra:
     keyspace: ${ASTRA_DB_KEYSPACE}
     application:
       token: ${ASTRA_DB_APPLICATION_TOKEN}
+server:
+  port: 8081
