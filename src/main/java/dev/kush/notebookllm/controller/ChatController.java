@@ -65,15 +65,15 @@ public class ChatController {
 
     @PostMapping("")
     public ChatMessageResponse chat(@RequestBody ChatMessageRequest chatMessageRequest, HttpServletResponse response, Principal principal) {
-        // TODO: use username from Principal
         var result = vectorStore.similaritySearch("username == %s".formatted(principal.getName()));
         String chatId = chatMessageRequest.chatId();
         if (StringUtils.isBlank(chatId)) {
             chatId = UUID.randomUUID().toString();
         }
+        final String finalChatId = chatId;
         var content = chatClient
                 .prompt()
-                .advisors(advisorSpec -> advisorSpec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId))
+                .advisors(advisorSpec -> advisorSpec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, finalChatId))
                 .system(
                         promptSystemSpec -> promptSystemSpec.param("memory",
                                 result.stream()
@@ -81,11 +81,12 @@ public class ChatController {
                                         .collect(Collectors.joining(","))))
                 .user(chatMessageRequest.message())
                 .call().content();
-        return new ChatMessageResponse(content, chatId);
+        return new ChatMessageResponse(content, finalChatId);
     }
 
     @GetMapping("/chat-history")
     public ResponseEntity<List<ChatHistoryResponse>> getChatHistory(@RequestParam String chatId) {
         return ResponseEntity.ok(chatHistoryService.findChatHistoryByChatIdAndUsername(chatId));
     }
+
 }
