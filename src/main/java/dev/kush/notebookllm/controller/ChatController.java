@@ -37,6 +37,9 @@ public class ChatController {
     public record ChatMessageRequest(String chatId, String message) {
     }
 
+    public record ChatMessageResponse(String content, String chatId) {
+    }
+
     public record ChatHistoryResponse(String message, MessageType messageType, Instant createdAt) {
     }
 
@@ -61,12 +64,16 @@ public class ChatController {
 
 
     @PostMapping("")
-    public String chat(@RequestBody ChatMessageRequest chatMessageRequest, HttpServletResponse response, Principal principal) {
+    public ChatMessageResponse chat(@RequestBody ChatMessageRequest chatMessageRequest, HttpServletResponse response, Principal principal) {
         // TODO: use username from Principal
         var result = vectorStore.similaritySearch("username == %s".formatted(principal.getName()));
-        return chatClient
+        String chatId = chatMessageRequest.chatId();
+        if (StringUtils.isBlank(chatId)) {
+            chatId = UUID.randomUUID().toString();
+        }
+        var content = chatClient
                 .prompt()
-                .advisors(advisorSpec -> setChatId(chatMessageRequest, response, advisorSpec))
+                .advisors(advisorSpec -> advisorSpec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId))
                 .system(
                         promptSystemSpec -> promptSystemSpec.param("memory",
                                 result.stream()
@@ -74,19 +81,11 @@ public class ChatController {
                                         .collect(Collectors.joining(","))))
                 .user(chatMessageRequest.message())
                 .call().content();
+        return new ChatMessageResponse(content, chatId);
     }
 
     @GetMapping("/chat-history")
     public ResponseEntity<List<ChatHistoryResponse>> getChatHistory(@RequestParam String chatId) {
         return ResponseEntity.ok(chatHistoryService.findChatHistoryByChatIdAndUsername(chatId));
-    }
-
-    private static void setChatId(ChatMessageRequest chatMessageRequest, HttpServletResponse response, ChatClient.AdvisorSpec advisorSpec) {
-        String chatId = chatMessageRequest.chatId();
-        if (StringUtils.isBlank(chatId)) {
-            chatId = UUID.randomUUID().toString();
-        }
-        advisorSpec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId);
-        response.setHeader("x-chat-id", chatId);
     }
 }
