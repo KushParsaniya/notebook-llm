@@ -22,16 +22,16 @@ public class UploadFileController {
     private final B2Service b2Service;
 
     @PostMapping("/upload-small-file")
-    public ResponseEntity<Boolean> uploadFile(@RequestParam("multipartFile") MultipartFile multipartFile) {
+    public ResponseEntity<UserController.UserUploadedFileDto> uploadFile(@RequestParam("multipartFile") MultipartFile multipartFile) {
         File file = convertMultiPartToFile(multipartFile);
         if (file == null) {
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        var status = b2Service.uploadSmallFileToBucket(new CustomB2ContentSource(file));
-        if (status) {
-            return ResponseEntity.ok(true);
+        var userUploadedFileDto = b2Service.uploadSmallFileToBucket(new CustomB2ContentSource(file));
+        if (userUploadedFileDto != null) {
+            return ResponseEntity.ok(userUploadedFileDto);
         }
-        return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @PostMapping("/upload-large-file")
@@ -40,8 +40,8 @@ public class UploadFileController {
         if (file == null) {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
-        var status = b2Service.uploadLargeFileToBucket(new CustomB2ContentSource(file));
-        if (status) {
+        var userUploadedFileDto = b2Service.uploadLargeFileToBucket(new CustomB2ContentSource(file));
+        if (userUploadedFileDto != null) {
             return ResponseEntity.ok(true);
         }
         return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);

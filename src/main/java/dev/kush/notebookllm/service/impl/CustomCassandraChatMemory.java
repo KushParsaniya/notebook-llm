@@ -43,7 +43,8 @@ public class CustomCassandraChatMemory implements ChatMemory {
     }
 
     private static String getTitle(List<Message> messages) {
-        return messages.getFirst().getContent().substring(0, 20);
+        String content = messages.getFirst().getContent();
+        return content.length() <= 25 ? content : content.substring(0, 25);
     }
 
     private ChatHistory getChatHistory(String conversationId, Message message, long userId, String username) {

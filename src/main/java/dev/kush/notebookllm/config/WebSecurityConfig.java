@@ -6,12 +6,15 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 public class WebSecurityConfig {
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationConverter jwtAuthenticationConverter) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                            JwtAuthenticationConverter jwtAuthenticationConverter,
+                                            CorsConfigurationSource corsConfigurationSource) throws Exception {
         http.authorizeHttpRequests(req -> req
                         .requestMatchers("/api/v1/user/create", "/api/v1/user/login").permitAll()
                         .anyRequest().authenticated())
@@ -19,8 +22,9 @@ public class WebSecurityConfig {
                         jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)
                 ))
                 .csrf(csrf -> csrf.disable())
-                .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults());
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
+                .httpBasic(Customizer.withDefaults());
+//                .formLogin(Customizer.withDefaults());
         return http.build();
     }
 }

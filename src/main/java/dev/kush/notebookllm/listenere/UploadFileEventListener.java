@@ -22,7 +22,6 @@ public class UploadFileEventListener {
         if (uploadedFile == null) {
             log.error("UploadFileEventListener :: onFileUpload :: uploadedFile is null");
         }
-        uploadedFileService.save(uploadedFile);
         // process the uploaded file
         documentService.processDocument(uploadedFile.getId(), uploadedFile.getFileId(), uploadedFile.getUserId(), uploadedFile.getUsername());
     }

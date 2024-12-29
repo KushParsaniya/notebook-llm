@@ -6,7 +6,7 @@ services:
       - 'CASSANDRA_PASSWORD=admin'
       - 'CASSANDRA_KEYSPACE=springframework'
     volumes:
-      - '/var/lib/cassandra'
+      - './cassandra_data:/var/lib/cassandra'
     ports:
       - '9042:9042'
   postgres:
@@ -16,6 +16,6 @@ services:
       - 'POSTGRES_PASSWORD=postgres'
       - 'POSTGRES_USER=postgres'
     volumes:
-        - '/var/lib/postgresql/data'
+      - './postgres_data:/var/lib/postgresql/data'
     ports:
       - '5432:5432'
