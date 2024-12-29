@@ -1,30 +1,3 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DBNAME}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
-  jpa:
-    hibernate:
-      ddl-auto: update
-  cassandra:
-    keyspace-name: ${CASSANDRA_KEYSPACE}
-    username: ${CASSANDRA_USER}
-    password: ${CASSANDRA_PASSWORD}
-    schema-action: create_if_not_exists
-    request:
-        timeout: 10s
-    connection:
-      connect-timeout: 10s
-
-datastax:
-  astra:
-    secure-connect-bundle: ${ASTRA_SECURE_CONNECT_BUNDLE}
-astra:
-  db:
-    id: ${ASTRA_DB_ID}
-    region: ${ASTRA_DB_REGION}
-    keyspace: ${ASTRA_DB_KEYSPACE}
-    application:
-      token: ${ASTRA_DB_APPLICATION_TOKEN}
-server:
-  port: 8081
+  config:
+    import: configserver:http://${CONFIG_SERVER_HOST:localhost}:${CONFIG_SERVER_PORT:8888}

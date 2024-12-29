@@ -1,24 +1,69 @@
 spring:
+  # postgres
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: postgres
+    hikari:
+      auto-commit: false
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: update
+    open-in-view: false
+  # cassandra
   cassandra:
     contact-points: http://localhost:9042
     keyspace-name: springframework
     username: admin
     password: admin
-    connection:
-      connect-timeout: 10s
+    schema-action: create_if_not_exists
     request:
       timeout: 10s
-    schema-action: CREATE_IF_NOT_EXISTS
-logging:
-  level:
-    org:
-      springframework:
-        security: trace
+    connection:
+      connect-timeout: 10s
+  # ai
+  ai:
+    openai:
+      api-key: ${GROQ_API_KEY}
+      chat:
+        enabled: false
+      embedding:
+        enabled: false
+    mistralai:
+      chat:
+        enabled: false
+      embedding:
+        api-key: ${MISTRALAI_API_KEY}
+    ollama:
+      base-url: http://${OLLAMA_BASE_URL}:11434
+      chat:
+        enabled: false
+      embedding:
+        enabled: false
+    vectorstore:
+      cassandra:
+        initialize-schema: true
+  servlet:
+    multipart:
+      max-file-size: 5MB
+  cloud:
+    config:
+      enabled: false
+# b2
+b2:
+  application:
+    key:
+      value: ${B2_APPLICATION_KEY_VALUE}
+      id: ${B2_APPLICATION_KEY_ID}
+      name: ${B2_APPLICATION_KEY_NAME}
+  bucket:
+    id: ${B2_BUCKET_ID}
+
+# datastax
+astra:
+  db:
+    id: ${ASTRA_DB_ID}
+    region: ${ASTRA_DB_REGION}
+    keyspace: ${ASTRA_DB_KEYSPACE}
+    application:
+      token: ${ASTRA_DB_APPLICATION_TOKEN}
