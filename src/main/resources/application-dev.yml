@@ -23,23 +23,6 @@ spring:
       connect-timeout: 10s
   # ai
   ai:
-    openai:
-      api-key: ${GROQ_API_KEY}
-      chat:
-        enabled: false
-      embedding:
-        enabled: false
-    mistralai:
-      chat:
-        enabled: false
-      embedding:
-        api-key: ${MISTRALAI_API_KEY}
-    ollama:
-      base-url: http://${OLLAMA_BASE_URL}:11434
-      chat:
-        enabled: false
-      embedding:
-        enabled: false
     vectorstore:
       cassandra:
         initialize-schema: true

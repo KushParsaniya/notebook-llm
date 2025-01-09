@@ -8,8 +8,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.messages.MessageType;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -46,13 +48,13 @@ public class ChatController {
     private final ChatClient chatClient;
     private final VectorStore vectorStore;
 
-    public ChatController(ChatClient.Builder builder,
+    public ChatController(@Qualifier("openAiChatModel") ChatModel chatModel,
                           CustomCassandraChatMemory customCassandraChatMemory,
                           @Value("classpath:prompts/use-capture-memory.sh") Resource useCaptureMemoryPrompt,
                           CaptureMemoryAdvisor captureMemoryAdvisor, VectorStore vectorStore,
                           ChatHistoryService chatHistoryService) {
         this.vectorStore = vectorStore;
-        this.chatClient = builder
+        this.chatClient = ChatClient.builder(chatModel)
                 .defaultSystem(useCaptureMemoryPrompt)
                 .defaultAdvisors(
                         new MessageChatMemoryAdvisor(customCassandraChatMemory),

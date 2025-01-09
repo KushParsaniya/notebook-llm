@@ -33,7 +33,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.ai:spring-ai-cassandra-store-spring-boot-starter'
-    implementation 'org.springframework.ai:spring-ai-mistral-ai-spring-boot-starter'
     implementation 'org.springframework.ai:spring-ai-openai'
     implementation 'org.springframework.boot:spring-boot-starter-data-cassandra'
     implementation 'org.springframework.ai:spring-ai-ollama'
